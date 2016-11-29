@@ -1,0 +1,43 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class MotornoVozilo {
+protected:
+	string boja;
+	double vel_spremnika;
+	double gorivo;
+	double potrosnja;
+public:
+	MotornoVozilo() :boja("bijela"), vel_spremnika(100), gorivo(100), potrosnja(0.06) {}
+	MotornoVozilo(string b, double v_s, double g, double p) :boja(b), vel_spremnika(v_s), gorivo(g), potrosnja(p) {}
+	void Oboji(string b) { boja = b; }
+	void Natoci(double g)
+	{
+		if ((vel_spremnika - gorivo)<g) g = g - (g - (vel_spremnika - gorivo));
+		gorivo += g;
+		cout << "Natoceno " << g << " L goriva" << endl;
+	}
+	virtual void Vozi(double km) = 0;
+};
+
+class Automobil : public MotornoVozilo {
+protected:
+	string model;
+	double max_speed;
+public:
+	Automobil() :model("A"), max_speed(100) {}
+	Automobil(string b, double v_s, double g, double p, string m, double max_s) :model(m), max_speed(max_s), MotornoVozilo(b, v_s, g, p) {}
+	void Vozi(double km) { gorivo -= (km*potrosnja); }
+};
+
+int main()
+{
+	Automobil Auto[5];
+	for (int i = 0; i < 5; i++)
+	{
+		Auto[i].Vozi(400);
+		Auto[i].Natoci(30);
+	}
+	return 0;
+}
